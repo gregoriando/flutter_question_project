@@ -15,19 +15,36 @@ class QuestionApp extends StatefulWidget {
 
 class _QuestionAppState extends State<QuestionApp> {
   var _perguntaSelecionada = 0; // contador
+  var _pontuacaoTotal = 0;
   // lista usada para o Texto da pergunta e suas respostas é uma lista de map
   final _perguntas = [
     {
       'texto': 'Qual é sua cor favorita?',
-      'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco'],
+      'respostas': [
+        {'texto': 'Preto', 'pontuacao': 10},
+        {'texto': 'Vermelho', 'pontuacao': 5},
+        {'texto': 'Verde', 'pontuacao': 3},
+        {'texto': 'Branco', 'pontuacao': 1},
+      ],
     },
     {
       'texto': 'Qual é o seu animal favorito?',
-      'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
+      'respostas': [
+        {'texto': 'Coelho', 'pontuacao': 10},
+        {'texto': 'Cobra', 'pontuacao': 5},
+        {'texto': 'Elefante', 'pontuacao': 3},
+        {'texto': 'LeÃo', 'pontuacao': 1},
+      ],
     },
     {
       'texto': 'Qual é o seu instrutor favorito?',
-      'respostas': ['Maria', 'João', 'Léo', 'Pedro'],
+      'respostas': [
+        {'texto': 'Léo', 'pontuacao': 10},
+        {'texto': 'Maria', 'pontuacao': 5},
+        {'texto': 'João', 'pontuacao': 3},
+
+        {'texto': 'Pedro', 'pontuacao': 1},
+      ],
     },
   ];
   bool get isSelectedQuestion {
@@ -35,12 +52,20 @@ class _QuestionAppState extends State<QuestionApp> {
   }
 
   // responder é uma função que muda o estado com o setState
-  void _responder() {
+  void _responder(int pontuacao) {
     if (isSelectedQuestion) {
       setState(() {
         _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;
       });
     }
+  }
+
+  void _restartQuestionnaire() {
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
+    });
   }
 
   // Garante que não vai dar erro porque o tamanho se for menor do que o tamanho de perguntas nao renderiza
@@ -59,7 +84,7 @@ class _QuestionAppState extends State<QuestionApp> {
                   perguntaSelecionada: _perguntaSelecionada,
                   onPressed: _responder,
                 )
-                : Result('Parabéns!'),
+                : Result(_pontuacaoTotal, _restartQuestionnaire),
       ),
     );
   }

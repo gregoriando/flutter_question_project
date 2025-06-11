@@ -5,7 +5,7 @@ import 'package:flutter_question_project/question.dart';
 class Questionnaire extends StatelessWidget {
   final List<Map<String, Object>> perguntas;
   final int perguntaSelecionada;
-  final void Function() onPressed;
+  final void Function(int) onPressed;
 
   const Questionnaire({
     required this.perguntas,
@@ -22,12 +22,15 @@ class Questionnaire extends StatelessWidget {
   Widget build(BuildContext context) {
     final answers =
         isSelectQuestion
-            ? perguntas[perguntaSelecionada]['respostas'] as List<String>
+            ? perguntas[perguntaSelecionada]['respostas']
+                as List<Map<String, Object>>
             : [];
     return Column(
       children: [
         Question(perguntas[perguntaSelecionada]['texto'].toString()),
-        ...answers.map((t) => Answer(t, onPressed)),
+        ...answers.map((answer) {
+          return Answer(answer['texto'], () => onPressed(answer['pontuacao']));
+        }),
       ],
     );
   }
